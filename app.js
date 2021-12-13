@@ -9,6 +9,8 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const sequelize = require("./src/config/database")
 
 
+// git test değişiklik
+
 // router  
 const adminRouter = require("./src/routers/adminRouter")
 const authRouter = require("./src/routers/authRouter")
