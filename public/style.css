@@ -1,0 +1,32 @@
+.randomImages img{
+    width: 100%  !important;
+    height: 87vh;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.formCenter{
+    background-color: #E65E07;
+    width: 50%;
+    min-height: 87vh;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+.formCenter form{
+    margin-left: 18%;
+    width: calc(100% - 20px);
+    color: black;
+}
+.loginHosGeldin{
+    margin-top: 15%;
+    color: aliceblue;
+}
+.loginLink{
+    margin-top: 10%;
+    margin-left: 33%;
+}
+.registerLink{
+    margin-top: 3%;
+    margin-left: 27.5%;
+}
+
+

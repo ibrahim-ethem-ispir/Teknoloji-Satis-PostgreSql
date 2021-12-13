@@ -1,0 +1,10 @@
+node_modules
+
+# images
+images
+
+# config
+.env
+database.js
+
+notes.txt

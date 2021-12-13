@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+    <%-include("./inc/head")%>
+<body>
+    <div>
+        <%-include("./inc/header")%>
+    </div>
+    <div class="container">
+        <div class="float-start randomImages w-50">
+            <img src="https://source.unsplash.com/random/1920x1080" alt="Random Images">
+        </div>  
+
+        <div class="formCenter float-end w-50">
+                
+                <form action="/register" method="post" class="w-50 mt-2 mx-auto">
+                    <p class="fs-3 fw-bold text-light text-center">Aramıza Hoş Geldiniz</p>
+                    <% if (locals.validationError != undefined) { %> 
+                        <%-include("./partials/_message")%> 
+                    <% } %> 
+                    <label class="form-label" for="name">Adınızı Girin</label><br>
+                    <input class="form-control float-start mb-2" value="<%= typeof name != "undefined" ? name : "" %>" name="name" type="text" id="name">
+        
+                    <label for="surname" class="form-label">Soyadınızı Girin</label><br>
+                    <input class="form-control mb-2" value="<%= typeof surname != "undefined" ? surname : "" %> " name="surname" type="text" id="surname">
+                    
+        
+                    <label for="email" class="form-label">Email Girin</label><br>
+                    <input class="form-control mb-2" value="<%= typeof email != "undefined" ? email : "" %> " type="email" id="email" name="email">
+        
+                    <label for="password" class="form-label">Şifrenizi Girin</label><br>
+                    <input class="form-control mb-2" value="<%= typeof password != "undefined" ? password : "" %>" type="password" name="password" id="password">
+        
+                    <label for="passwordAgain" class="form-label">Şifrenizi Tekrar Girin</label><br>
+                    <input class="form-control" value="<%= typeof passwordAgain != "undefined" ? passwordAgain : "" %>" type="password" name="passwordAgain" id="passwordAgain"><br>
+
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-outline-light">Kayıt Ol</button>
+                        </div>
+                    </div>
+                    
+                </form>
+                <div class="registerLink">
+                    <a class="link-light" href="/forget-password">Forget Password ( I Forget My Password )</a> <br>
+                    <a class="link-light" href="/login">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <%- include("./inc/footer") %> 
+    </div>
+</body>
+</html>
