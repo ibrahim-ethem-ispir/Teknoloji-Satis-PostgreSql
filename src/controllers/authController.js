@@ -44,8 +44,8 @@ registerPost = async (req,res) => {
                     password: req.body.password
                 })
                     .then((result) => {
-                        console.log("Registration Successfully Added")
-                        res.redirect("/register")
+                        req.flash("successMessage",[{msg : "Registration Successfully Added"}])
+                        res.redirect("/login")
         
                     })
                     .catch((err) => {

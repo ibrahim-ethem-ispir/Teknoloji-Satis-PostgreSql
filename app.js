@@ -69,6 +69,7 @@ app.use(
 app.use(flash())
 app.use((req,res,next) => {
     res.locals.validationError = req.flash("validationError")
+    res.locals.successMessage = req.flash("successMessage")
     res.locals.name = req.flash("name")
     res.locals.surname = req.flash("surname")
     res.locals.email = req.flash("email")
