@@ -1,11 +1,26 @@
 const {validationResult} = require("express-validator")
 const {adminRegistration} = require("../models/userModel")
+const passport = require("passport")
+require("../config/passportLocal")(passport)
 
 login = (req,res) => {
     res.render("login", {title:"Giriş Yap"})
 }
-loginPost = (req,res) => {
-
+loginPost = (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        req.flash("validationError",errors.array())
+        req.flash("email",req.body.email)
+        // hatalı işlemde burada flash a email aktarılır ve sayfa yenilendiğinde silinmesini engeller
+        res.redirect("/login")
+    }
+    else{
+        passport.authenticate("local", {
+            successRedirect: "/", // başarılı girişte
+            failureRedirect: "/login", // başarısız girişte
+            failureFlash: true // hata mesajlaını aç
+        })(req, res, next)
+    }
 }
 
 

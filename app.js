@@ -5,9 +5,12 @@ const dotenv = require("dotenv").config({path:"./src/config/.env"})
 const session = require("express-session")
 const flash = require("connect-flash")
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const passport = require("passport")
+
 // database bağlantısı
 const sequelize = require("./src/config/database")
-
+// public e erişim sağlamak için 
+app.use(express.static(__dirname))
 
 // router  
 const adminRouter = require("./src/routers/adminRouter")
@@ -32,7 +35,7 @@ const authRouter = require("./src/routers/authRouter")
 
 app.use(
     session({
-      secret: "keyboard cat",
+      secret: process.env.SESSION_SECRET_KEY,
       store: new SequelizeStore({
         db: sequelize,
         checkExpirationInterval: 15 * 60 * 1000,  // süresi dolan sessions ( oturumları ) her 15 dakikada bir veritabanından siler
@@ -48,7 +51,7 @@ app.use(
 );
 
 
-{/*  // mongo da bu şekilde kayıt yapılıyor
+{/*  // mongo da bu şekilde kayıt yapılıyor 
     const MongoDBStore = require("connect-mongodb-session")(session)
     const sessionStore = new MongoDBStore({
     uri: process.env.MONGO_CONNECTION_STRING,
@@ -75,9 +78,11 @@ app.use((req,res,next) => {
     res.locals.email = req.flash("email")
     res.locals.password = req.flash("password")
     res.locals.passwordAgain = req.flash("passwordAgain")
+    res.locals.loginError = req.flash("error")
     next()
 })
-
+app.use(passport.initialize())
+app.use(passport.session())
 
 // veritabanına bağlantı kontrol
 const connectionTest = async () => {
@@ -89,8 +94,7 @@ const connectionTest = async () => {
       }
 }
 connectionTest()
-// public e erişim sağlamak için 
-app.use(express.static(__dirname))
+
 
 // ejs
 app.set("view engine","ejs")
