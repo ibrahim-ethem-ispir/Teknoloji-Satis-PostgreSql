@@ -16,7 +16,7 @@ loginPost = (req, res, next) => {
     }
     else{
         passport.authenticate("local", {
-            successRedirect: "/", // başarılı girişte
+            successRedirect: "/admin", // başarılı girişte
             failureRedirect: "/login", // başarısız girişte
             failureFlash: true // hata mesajlaını aç
         })(req, res, next)
