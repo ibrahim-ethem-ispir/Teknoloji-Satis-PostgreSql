@@ -37,6 +37,20 @@ const validateNewUser = () => {
     ]
 }
 
+validateLogin = () => {
+    return [
+        body("email")
+            .trim()
+            .isEmail().withMessage("Enter a valid email")
+        ,
+        body("password")
+            .trim()
+            .isLength({min:6}).withMessage("your password must be at least 6 character")
+            .isLength({max:25}).withMessage("Your password can be a maximum of 25 characters.")
+    ]
+}
+
 module.exports = {
-    validateNewUser
+    validateNewUser,
+    validateLogin
 }

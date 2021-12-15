@@ -16,7 +16,7 @@
             
             <p class="fs-2 fw-bold text-center loginHosGeldin">Hoş Geldiniz</p>
             
-            <form action="/login" method="post">
+            <form action="/admin-login" method="post">
                 <div class="w-75">
                     <% if (locals.validationError != undefined || locals.successMessage != undefined || locals.loginError != undefined) { %>
                         <%- include("./partials/_message") %> 
@@ -24,7 +24,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="email" class="form-label w-75">Email address</label>
-                  <input type="email" name="email" id="email" class="form-control w-75">
+                  <input type="email" value="<%= typeof email != "undefined" ? email: "" %> " name="email" id="email" class="form-control w-75">
                 </div>
 
                 <div class="mb-3">
@@ -39,8 +39,8 @@
                     
               </form>
               <div class="loginLink">
-                <a class="link-light" href="/forget-password">Forget Password ( I Forget My Password )</a> <br>
-                <a class="link-light ms-5" href="/register">Register ( Create Account )</a>
+                <a class="link-light" href="/admin-forget-password">Forget Password ( I Forget My Password )</a> <br>
+                <a class="link-light ms-5" href="/admin-register">Register ( Create Account )</a>
             </div>
         </div>
     </div>

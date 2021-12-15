@@ -1,16 +1,20 @@
 const router = require("express").Router()
 const authController = require("../controllers/authController")
 const validationMiddleware = require("../middleware/validationMiddleware")
+const authMiddleware = require("../middleware/authMiddleware")
 
-router.get("/login", authController.login)
-router.post("/login", authController.loginPost)
-
-
-router.get("/register", authController.register)
-router.post("/register", validationMiddleware.validateNewUser(), authController.registerPost)
+// admin
+router.get("/admin-login",authMiddleware.ifLoggedOut, authController.login)
+router.post("/admin-login",authMiddleware.ifLoggedOut,validationMiddleware.validateLogin() ,authController.loginPost)
 
 
-router.get("/forget-password", authController.forgetPassword)
-router.post("/forget-password", authController.forgetPasswordPost)
+router.get("/admin-register",authMiddleware.ifLoggedOut, authController.register)
+router.post("/admin-register",authMiddleware.ifLoggedOut, validationMiddleware.validateNewUser(), authController.registerPost)
+
+
+router.get("/admin-forget-password",authMiddleware.ifLoggedOut, authController.forgetPassword)
+router.post("/admin-forget-password",authMiddleware.ifLoggedOut, authController.forgetPasswordPost)
+
+router.get("/admin-logout", authMiddleware.ifTheSessionIsOpen, authController.adminLogout)
 
 module.exports = router

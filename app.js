@@ -11,10 +11,18 @@ const passport = require("passport")
 const sequelize = require("./src/config/database")
 // public e erişim sağlamak için 
 app.use(express.static(__dirname))
+// ejs
+app.set("view engine","ejs")
+app.set("views",path.resolve(__dirname,"./src/views"))
+
+// formdan gelen verileri okumak için
+app.use(express.urlencoded({extended:true}))
 
 // router  
 const adminRouter = require("./src/routers/adminRouter")
 const authRouter = require("./src/routers/authRouter")
+
+
 
 {
 // session veri tabanına kayıt
@@ -96,19 +104,10 @@ const connectionTest = async () => {
 connectionTest()
 
 
-// ejs
-app.set("view engine","ejs")
-app.set("views",path.resolve(__dirname,"./src/views"))
-
-// formdan gelen verileri okumak için
-app.use(express.urlencoded({extended:true}))
 
 // router ler
 app.use("/admin",adminRouter)
 app.use(authRouter)
-
-
-
 
 
 app.get("/",(req,res) => {
