@@ -17,4 +17,6 @@ router.post("/admin-forget-password",authMiddleware.ifLoggedOut, authController.
 
 router.get("/admin-logout", authMiddleware.ifTheSessionIsOpen, authController.adminLogout)
 
+router.get("/verify",authController.verifyMail)
+
 module.exports = router
