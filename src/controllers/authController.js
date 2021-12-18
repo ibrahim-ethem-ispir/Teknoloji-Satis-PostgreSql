@@ -110,7 +110,7 @@ registerPost = async (req,res) => {
                     to:newAdmin.email,
                     subject: "Please Confirm Your Email",
                     text: "Please click the link to confirm your mail : "+url
-                }), (error,info) => {
+                }, (error,info) => {
                     if (error) {
                         console.log("Error Output === "+error)
                     }
@@ -118,7 +118,7 @@ registerPost = async (req,res) => {
                     console.log(info)
                     transporter.close()
 
-                } 
+                }) 
                 req.flash("successMessage",[{msg: "Please Check Your Email Box"}])
                 res.redirect("/admin-login")
                 
@@ -184,7 +184,8 @@ verifyMail = (req, res, next) => {
         }
     }
     else {
-        console.log("token yok")
+        req.flash("error","No Token or invalid, please register again")
+        res.redirect("/admin-register")
     }
 }
 

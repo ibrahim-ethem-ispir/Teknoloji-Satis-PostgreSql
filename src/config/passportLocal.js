@@ -1,5 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy
 const {adminRegistration} = require("../models/userModel")
+const bcrypt = require("bcrypt")
 
 module.exports = function (passport) {
     const options = {
@@ -12,11 +13,18 @@ module.exports = function (passport) {
             if (!_foundAdmin) {
                 return done(null, false, { message: "admin not found" })
             }
-            if (_foundAdmin.password !== password ) {
+            const passwordCheck = await bcrypt.compare(password,_foundAdmin.password)
+            if (!passwordCheck){
                 return done(null, false, { message: "the password is incorrect" })
-            } else {
-                return done(null, _foundAdmin)
             }
+            else{
+                if (_foundAdmin && _foundAdmin.emailActive === false){
+                    return done(null, false ,{message: "Please confirm your email"})
+                }else{
+                    return done(null, _foundAdmin)
+                }
+            }
+           
         } catch (err) {
             return done(err)
         }
