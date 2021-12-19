@@ -37,7 +37,7 @@ const validateNewUser = () => {
     ]
 }
 
-validateLogin = () => {
+const validateLogin = () => {
     return [
         body("email")
             .trim()
@@ -50,7 +50,35 @@ validateLogin = () => {
     ]
 }
 
+const validateEmail = () => {
+    return [
+        body("email")
+            .trim()
+            .isEmail().withMessage("Enter a valid email")
+    ]
+}
+
+const validateNewPassword = () => {
+    return[
+        body("password")
+            .trim()
+            .isLength({min:6}).withMessage("Your Password Must Be At Least 6 Characters")
+            .isLength({max:25}).withMessage("your surname must be a maximum of 30 characters")
+        ,
+        body("passwordAgain")
+            .trim()
+            .custom((value, {req}) => {
+                if (value !== req.body.password) {
+                    throw new Error("The passwords you entered are not the same")
+                }
+                return true
+            })
+    ]
+}
+
 module.exports = {
     validateNewUser,
-    validateLogin
+    validateLogin,
+    validateEmail,
+    validateNewPassword
 }
