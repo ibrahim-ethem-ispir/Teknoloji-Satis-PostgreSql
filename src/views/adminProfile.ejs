@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+    <%-include("./inc/adminHead")%> 
+<body>
+    <div>
+        <%-include("./inc/adminHeader")%> 
+    </div>
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-9 bg-light">
+                <div class="card p-3 py-4 bg-light">
+                    <div class="text-center"> <img src="/uploads/adminProfileImg/<%- user.adminProfileImg %> " width="100" class="rounded-circle"> </div>
+                    <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">Minare Yazılım</span>
+                        <h5 class="mt-2 mb-0"><%= user.name +" "+ user.surname %> </h5> 
+                        <form action="/admin/profile-update" method="post" enctype="multipart/form-data">
+                            <div>
+                                <b class="d-block mt-3">Profil Fotoğrafı</b>   
+                                <div class="w-50 mx-auto">
+                                    <% if (locals.validationError != undefined || locals.successMessage != undefined || locals.loginError != undefined) { %>
+                                        <%-include("./partials/_message") %>
+                                        <% } %> 
+                                </div>                             
+                                <input type="file" class="btn border" name="profileImg" id="profileImg">
+                                <p>En Fazla 3mb Boyutunda resim yükleyebilirsiniz</p>
+                            </div>    
+                       <div class="float-start mt-4">
+                            <ul class="list-group list-group-horizontal fs-5">
+                                <li class="list-group-item rounded-3"><a href="#"><i class="bi bi-facebook"></i></a></li>
+                                <li class="list-group-item rounded-3"><a href="#"><i class="bi bi-instagram"></i></a></li>
+                                <li class="list-group-item rounded-3"><a href="#"><i class="bi bi-linkedin"></i></a></li>
+                                <li class="list-group-item rounded-3"><a href="#"><i class="bi bi-google"></i></a></li>
+                            </ul>
+                       </div> 
+                       <div class="mt-2 w-50 mx-auto float-end">
+                           <div class=" float-start">
+                                <label for="password" class="form-label">Şifre Girin</label>
+                                <input class="form-control mb-2" name="password" type="password" id="password">
+                           </div>
+                            <div class=" float-end">
+                                <label for="passwordAgain" class="form-label">Şifrenizi Tekrar Girin</label>
+                                <input class="form-control mb-2" name="passwordAgain" type="password" id="passwordAgain">
+                            </div> <br>
+                       </div>
+                      
+                       <br> <br> <br><hr> 
+                        <div>
+                            <button type="submit" class="btn btn-primary px-4 ms-3">Kaydet</button> 
+                        </div>
+                    </form> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <%-include("./inc/footer")%> 
+    </div>
+</body>
+</html>

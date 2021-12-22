@@ -16,10 +16,18 @@
             <li class="nav-item me-2">
               <a class="btn btn-sm btn-outline-danger" href="#">Ürün Ekle</a>
             </li>
-            
   
           </ul>
-          <a class="btn btn-sm btn-outline-danger" href="/admin-logout">Çıkış Yap</a>
+          <div class="btn-group">
+            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              Seçenekler
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/admin/profile"><i class="bi bi-person-square fs-5"></i><span class="p-2">Profil</span></a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="gb-danger dropdown-item" href="/admin-logout"><i class="bi bi-box-arrow-right fs-5"></i><span class="p-2"> Çıkış Yap</span></a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

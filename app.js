@@ -11,6 +11,7 @@ const passport = require("passport")
 const sequelize = require("./src/config/database")
 // public e erişim sağlamak için 
 app.use(express.static(__dirname))
+app.use("/uploads",express.static(path.join(__dirname,"/src/uploads")))
 // ejs
 app.set("view engine","ejs")
 app.set("views",path.resolve(__dirname,"./src/views"))

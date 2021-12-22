@@ -35,7 +35,15 @@ module.exports = function (passport) {
     
     passport.deserializeUser(function (id, done) {
         adminRegistration.findByPk(id).then(function ( user) {
-            done(null, user)
+            const loggedInAdmin = {
+                id:user.id,
+                name:user.name,
+                surname:user.surname,
+                email:user.email,
+                password: user.password,
+                adminProfileImg: user.adminProfileImg
+            }
+            done(null, loggedInAdmin)
         })
         .catch(function(err){
             done(err, false);

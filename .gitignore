@@ -3,6 +3,8 @@ node_modules
 # images
 images
 
+uploads
+
 # config
 .env
 database.js

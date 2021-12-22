@@ -20,6 +20,10 @@ const adminRegistration = sequelize.define("adminRegistration", {
         type: DataTypes.STRING,
         allowNull: false
     },
+    adminProfileImg:{
+        type: DataTypes.STRING,
+        defaultValue: "adminProfileImg.png"
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
