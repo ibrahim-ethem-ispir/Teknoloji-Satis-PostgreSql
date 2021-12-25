@@ -22,14 +22,15 @@
                         <%- include("./partials/_message") %> 
                     <% } %>
                 </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label w-75">Email address</label>
-                  <input type="email" value="<%= typeof email != "undefined" ? email: "" %>" name="email" id="email" class="form-control w-75">
+
+                <div class="form-floating mb-3 w-75">
+                    <input type="email" class="form-control" id="email" value="<%= typeof email != "undefined" ? email: "" %>" name="email" placeholder="name@example.com">
+                    <label for="email">Email address</label>
                 </div>
 
-                <div class="mb-3">
-                  <label for="password" class="form-label  w-75">Password</label>
-                  <input type="password" class="form-control w-75" name="password" id="password">
+                <div class="form-floating w-75 mb-4">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                    <label for="password">Password</label>
                 </div>
                 <div class="row">
                     <div class="col-9 text-center">

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<%- include("./inc/adminHead")%>
+
+    <body>
+        <div>
+            <%- include("./inc/adminHeader")%>
+        </div>
+        <section class="h-100 h-custom" style="background-color: #F07E0C;">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-8 col-xl-8">
+                  <div class="card rounded-3">
+                    <img src="/public/images/add-product-image.jpg" class="w-100" style="border-top-left-radius: .3rem;height: 23vh; border-top-right-radius: .3rem;" alt="Sample photo">
+                    <div class="card-body p-4">
+                      <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Product Registration</h3>
+                     
+                      <form action="/admin/add-product" enctype="multipart/form-data" method="post" class="mx-auto">
+                        
+                        <div class="w-25 float-start px-1 input-group-sm">
+                            <label class="form-label" for="productCode">Ürün Kodu</label>
+                            <input class="form-control" value="<%= typeof productCode != "undefined" ? productCode : "" %>" name="productCode" type="text" id="productCode">
+                        </div>
+
+                        <div class="w-25 float-start px-1 input-group-sm">
+                            <label for="unitPrice" class="form-label">Birim Fiyatı</label><br>
+                            <input class="form-control" value="<%= typeof unitPrice != "undefined" ? unitPrice : "" %>" name="unitPrice" type="text" id="unitPrice">
+                        </div>
+
+                        <div class="w-25 float-start mt-4 px-1 pt-2">
+                            <select name="categoryId" class="form-select form-select-sm mb-4" aria-label=".form-select-sm example">
+                                <option selected>Kategori</option>
+                                <% category.forEach(element => { %>
+                                    <option value="<%= element.id %>" > <%= element.categoryName %> </option>
+                                <% }) %>
+                            </select>
+                        </div>  
+
+                        <div class="w-25 float-end mt-4 px-1 pt-2">
+                            <select name="brandId" class="form-select form-select-sm mb-4" aria-label=".form-select-sm example">
+                                <option selected>Marka</option>
+                                <% brand.forEach(element => { %>
+                                    <option value="<%= element.id %>" > <%= element.brandName %> </option>
+                                <% }) %>
+                            </select>
+                        </div> 
+
+                        <div class="w-50 float-start mx-auto px-3 mb-2">
+                            <label for="productName" class="form-label">Ürün Adı</label>
+                            <input class="form-control" value="<%= typeof productName != "undefined" ? productName : "" %>" name="productName" type="text" id="productName">
+                        </div>
+                        
+                        <div class="w-50 float-end px-2 mb-2">
+                            <label for="productImage" class="form-label">Ürün Resmi</label>
+                            <input class="form-control" name="productImage" type="file" id="productImage">
+                        </div> 
+
+                        
+                        <div class="w-100 px-2">
+                            <label class="form-label" for="productDetail">Product Details</label>
+                            <textarea class="form-control" name="productDetail" id="productDetail"></textarea>
+                        </div>
+                       
+                        <div class="w-25  d-inline-block">
+                            <label for="stokAmount" class="form-label">Stok Miktarı</label><br>
+                            <input class="form-control" value="<%= typeof stokAmount != "undefined" ? stokAmount : "" %>" type="text" id="stokAmount" name="stokAmount"><br>
+                        </div>
+                        <div class="w-75 float-end mt-3 px-5">
+                            <% if (locals.validationError != undefined || locals.successMessage != undefined || locals.loginError != undefined) { %>
+                                <%-include("./partials/_message") %>
+                                <% } %>
+                        </div>
+                        <button type="submit" class="btn btn-danger px-4 position-relative mt-3 top-50 start-50 translate-middle">Kaydet</button>
+                    </form>
+          
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        <div>
+            <%- include("./inc/footer") %>
+        </div>
+    </body>
+
+</html>

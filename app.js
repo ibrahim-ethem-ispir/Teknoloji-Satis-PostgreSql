@@ -7,6 +7,10 @@ const flash = require("connect-flash")
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport")
 
+// model
+const { product, category, order, orderDetail, brand } = require("./src/models/productCategoryOrderModel")
+const {userRegistration, adress, city, town} = require("./src/models/userModel")
+
 // database bağlantısı
 const sequelize = require("./src/config/database")
 // public e erişim sağlamak için 
@@ -78,6 +82,7 @@ app.use(
     }
 }))*/}              // not
 
+// Hata Mesajları
 app.use(flash())
 app.use((req,res,next) => {
     res.locals.validationError = req.flash("validationError")
@@ -88,6 +93,9 @@ app.use((req,res,next) => {
     res.locals.password = req.flash("password")
     res.locals.passwordAgain = req.flash("passwordAgain")
     res.locals.loginError = req.flash("error")
+
+    /* add product page */
+    res.locals.productDetail = req.flash("productDetail")
     next()
 })
 app.use(passport.initialize())
@@ -119,7 +127,25 @@ app.use((req,res) => {
     res.render("404",{title:"Sayfa Bulunamadı"})
 })
 
-sequelize.sync()
+category.hasMany(product,{foreignKey: {
+  allowNull: false,
+}})
+product.belongsTo(category,{foreignKey: {
+  allowNull: false,
+}})
+
+brand.hasMany(product,{foreignKey: {
+  allowNull: false
+}})
+product.belongsTo(brand,{foreignKey: {
+  allowNull: false,
+}})
+
+
+// force:true tüm tabloları siler ve tablolar tekrar oluşturulur
+sequelize
+  //.sync({force:true})
+  .sync()
   .then(() => {
     console.log("Tables added to database")
   })

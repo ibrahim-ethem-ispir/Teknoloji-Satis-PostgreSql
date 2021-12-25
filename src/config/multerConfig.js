@@ -23,7 +23,24 @@ const imageFileFilter = (req, file, cb) => {
 }
 
 
-const uploadImage = multer({ storage: myStrorage, fileFilter: imageFileFilter })
+const myStrorageProduct = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, "../uploads/productImage"))
+    },
+    filename: (req, file, cb) => {
+        console.log("product name === "+req.body.productName);
+        console.log("product code === "+req.body.productCode);
+        // burada dosya adımızı oluşturalım
+        cb(null, req.body.productName + "" +req.body.productCode+ "" +path.extname(file.originalname))
+    }
+})
 
-module.exports = uploadImage
 
+const adminProfileImage = multer({ storage: myStrorage, fileFilter: imageFileFilter })
+const productImage = multer({ storage: myStrorageProduct, fileFilter: imageFileFilter })
+
+
+module.exports = {
+    adminProfileImage,
+    productImage
+}
