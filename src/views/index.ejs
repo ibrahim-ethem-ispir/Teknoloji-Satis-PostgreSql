@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="tr">
-    <%-include("./inc/head")%> 
-<body>
-    <div>
-        <%-include("./inc/header")%> 
-    </div>
-    <p class="text-center fs-2 fw-bold">Anasayfa</p>
-    <div>
-        <%- include("./inc/footer") %> 
-    </div>
-</body>
+<%- include("./inc/head")%>
+
+    <body>
+        <div>
+            <%- include("./inc/header")%>
+        </div>
+        <p class="text-center fs-2 fw-bold">Anasayfa</p>
+        <div class="mx-auto center w-25 position-absolute bottom-0 end-0 ">
+            <% if (locals.validationError !=undefined || locals.successMessage !=undefined || locals.loginError
+                !=undefined) { %>
+                <%- include("./partials/_message") %>
+                    <% } %>
+        </div>
+        <div>
+            <%- include("./inc/footer") %>
+        </div>
+    </body>
+
 </html>

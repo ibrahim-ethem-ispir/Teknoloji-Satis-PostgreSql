@@ -9,7 +9,7 @@ const passport = require("passport")
 
 // model
 const { product, category, order, orderDetail, brand } = require("./src/models/productCategoryOrderModel")
-const {userRegistration, adress, city, town} = require("./src/models/userModel")
+const {users, authorization} = require("./src/models/userModel")
 
 // database bağlantısı
 const sequelize = require("./src/config/database")
@@ -134,6 +134,7 @@ product.belongsTo(category,{foreignKey: {
   allowNull: false,
 }})
 
+
 brand.hasMany(product,{foreignKey: {
   allowNull: false
 }})
@@ -141,6 +142,13 @@ product.belongsTo(brand,{foreignKey: {
   allowNull: false,
 }})
 
+
+authorization.hasMany(users,{foreignKey:{
+    allowNull:false
+}})
+users.belongsTo(authorization,{foreignKey:{
+  allowNull:false
+}})
 
 // force:true tüm tabloları siler ve tablolar tekrar oluşturulur
 sequelize

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="tr">
+    <%- include("./inc/adminHead.ejs") %> 
+<body>
+    <%- include("./inc/adminHeader.ejs") %> 
+
+    <div class="row row-cols-1 row-cols-md-6 g-4 mt-2 ms-2">
+        <% users.forEach(user => { %>
+            <div class="col">
+                <div class="card">
+                    <img src="/uploads/userImages/<%- user.profileImg %>"
+                    class="card-img-top"
+                    alt="Admin İmage" />
+                <div class="card-body">
+                    <h5 class="card-title"><%- user.name +" "+user.surname%> </h5>
+                    <p class="card-text">
+                    This is a longer card with supporting text below as a natural lead-in to
+                    additional content. This content is a little bit longer.
+                    </p>
+                </div>
+                </div>
+            </div>
+        <% }) %>        
+    </div>
+
+    <div class="mx-auto center w-25 position-absolute bottom-0 end-0 ">
+        <% if (locals.validationError !=undefined || locals.successMessage !=undefined || locals.loginError
+            !=undefined) { %>
+            <%- include("./partials/_message") %>
+                <% } %>
+    </div>
+    <div>
+        <%- include("./inc/footer.ejs") %> 
+    </div>
+</body>
+</html>

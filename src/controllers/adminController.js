@@ -1,4 +1,4 @@
-const { adminRegistration } = require("../models/userModel")
+const { users } = require("../models/userModel")
 const bcrypt = require("bcrypt")
 const { validationResult } = require("express-validator")
 const { product, brand, category } = require("../models/productCategoryOrderModel")
@@ -28,15 +28,15 @@ const profileUpdate = async (req, res, next) => {
     }
     else {
         try {
-
+            if (req.file) {
+                currentInformation.profileImg = req.file.filename
+            }
             if (req.body.password) {
                 currentInformation.password = await bcrypt.hash(req.body.password, 12)
             }
-            if (req.file) {
-                currentInformation.adminProfileImg = req.file.filename
-            }
-
-            const result = await adminRegistration.findByPk(req.user.id)
+            
+            console.log(currentInformation);
+            const result = await users.findByPk(req.user.id)
             result.set(currentInformation)
             /*
              Burada set diyerek birden çok alanı güncellemek 
@@ -99,10 +99,16 @@ const addProductPost = async (req, res, next) => {
 
 }
 
+const administrators = async (req,res,next) => {
+    const _foundUsers = await users.findAll()
+    res.render("administrators",{users:_foundUsers ,title:"Personeller"})
+}
+
 module.exports = {
     admin,
     profile,
     profileUpdate,
     addProduct,
-    addProductPost
+    addProductPost,
+    administrators
 }

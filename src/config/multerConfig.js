@@ -3,7 +3,7 @@ const path = require("path")
 
 const myStrorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "../uploads/adminProfileImg"))
+        cb(null, path.join(__dirname, "../uploads/userImages"))
     },
     filename: (req, file, cb) => {
         console.log(req.user.email);
@@ -36,11 +36,11 @@ const myStrorageProduct = multer.diskStorage({
 })
 
 
-const adminProfileImage = multer({ storage: myStrorage, fileFilter: imageFileFilter })
+const userImages = multer({ storage: myStrorage, fileFilter: imageFileFilter })
 const productImage = multer({ storage: myStrorageProduct, fileFilter: imageFileFilter })
 
 
 module.exports = {
-    adminProfileImage,
+    userImages,
     productImage
 }

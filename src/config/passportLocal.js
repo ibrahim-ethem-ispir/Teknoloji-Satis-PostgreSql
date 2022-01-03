@@ -1,5 +1,5 @@
 const LocalStrategy = require("passport-local").Strategy
-const {adminRegistration} = require("../models/userModel")
+const {users} = require("../models/userModel")
 const bcrypt = require("bcrypt")
 
 module.exports = function (passport) {
@@ -9,7 +9,7 @@ module.exports = function (passport) {
     }
     passport.use( new LocalStrategy(options, async (email, password, done) => {
         try {
-            const _foundAdmin = await adminRegistration.findOne({ where : {email:email}})
+            const _foundAdmin = await users.findOne({ where : {email:email}})
             if (!_foundAdmin) {
                 return done(null, false, { message: "admin not found" })
             }
@@ -34,14 +34,15 @@ module.exports = function (passport) {
     })
     
     passport.deserializeUser(function (id, done) {
-        adminRegistration.findByPk(id).then(function ( user) {
+        users.findByPk(id).then(function ( user) {
             const loggedInAdmin = {
                 id:user.id,
                 name:user.name,
                 surname:user.surname,
                 email:user.email,
                 password: user.password,
-                adminProfileImg: user.adminProfileImg
+                authorizationId: user.authorizationId,
+                profileImg: user.profileImg
             }
             done(null, loggedInAdmin)
         })

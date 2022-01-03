@@ -12,7 +12,7 @@
 
         <div class="formCenter float-end w-50">
                 
-                <form action="/admin-register" method="post" class="w-50 mt-2 mx-auto">
+                <form action="/register" method="post" class="w-50 mt-2 mx-auto">
                     <p class="fs-3 fw-bold text-light text-center">Aramıza Hoş Geldiniz</p>
                     <% if (locals.validationError != undefined) { %> 
                         <%-include("./partials/_message")%> 
@@ -41,8 +41,8 @@
                     
                 </form>
                 <div class="registerLink">
-                    <a class="link-light" href="/admin-forget-password">Forget Password ( I Forget My Password )</a> <br>
-                    <a class="link-light" href="/admin-login">Login</a>
+                    <a class="link-light" href="/forget-password">Forget Password ( I Forget My Password )</a> <br>
+                    <a class="link-light" href="/login">Login</a>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator")
-const { adminRegistration } = require("../models/userModel")
+const { users } = require("../models/userModel")
 const passport = require("passport")
 require("../config/passportLocal")(passport)
 const bcrypt = require("bcrypt")
@@ -9,7 +9,7 @@ const nodemailer = require("nodemailer")
 
 
 const login = (req, res) => {
-    res.render("adminLogin", { title: "Giriş Yap" })
+    res.render("login", { title: "Giriş Yap" })
 }
 const loginPost = (req, res, next) => {
     const errors = validationResult(req)
@@ -17,12 +17,12 @@ const loginPost = (req, res, next) => {
         req.flash("validationError", errors.array())
         req.flash("email", req.body.email)
         // hatalı işlemde burada flash a email aktarılır ve sayfa yenilendiğinde silinmesini engeller
-        res.redirect("/admin-login")
+        res.redirect("/login")
     }
     else {
         passport.authenticate("local", {
-            successRedirect: "/admin", // başarılı girişte
-            failureRedirect: "/admin-login", // başarısız girişte
+            successRedirect: "/", // başarılı girişte
+            failureRedirect: "/login", // başarısız girişte
             failureFlash: true // hata mesajlaını aç
         })(req, res, next)
     }
@@ -30,7 +30,7 @@ const loginPost = (req, res, next) => {
 
 
 const register = (req, res) => {
-    res.render("adminRegister", { title: "Kayıt Ol" })
+    res.render("register", { title: "Kayıt Ol" })
 }
 const registerPost = async (req, res) => {
     const errors = validationResult(req)
@@ -41,11 +41,11 @@ const registerPost = async (req, res) => {
         req.flash("email", req.body.email)
         req.flash("password", req.body.password)
         req.flash("passwordAgain", req.body.passwordAgain)
-        res.redirect("/admin-register")
+        res.redirect("/register")
     }
     else {
         try {
-            const _admin = await adminRegistration.findOne({ where: { email: req.body.email } })
+            const _admin = await users.findOne({ where: { email: req.body.email } })
 
             if (_admin && _admin.emailActive == true) {
                 req.flash("validationError", [{ msg: "this email is in use" }])
@@ -54,14 +54,14 @@ const registerPost = async (req, res) => {
                 req.flash("email", req.body.email)
                 req.flash("password", req.body.password)
                 req.flash("passwordAgain", req.body.passwordAgain)
-                res.redirect("/admin-register")
+                res.redirect("/register")
             }
             else if ((_admin && _admin.emailActive == false) || _admin == null) {
                 /* burada eğer bu mail ile ilgili kayıt varsa ve email aktif 
                 değilse önce veri tabanından o kaydı siler ve bizim yeni
                 yapmış olduğumuz kaydı ekler */
                 if (_admin) {
-                    const deleteRecord = await adminRegistration.findOne({ where: { id: _admin.id } })
+                    const deleteRecord = await users.findOne({ where: { id: _admin.id } })
                     await deleteRecord.destroy()
                         .then(() => {
                             console.log("Silme işlemi başarılı")
@@ -70,15 +70,16 @@ const registerPost = async (req, res) => {
                             console.log("Delete failed === " + err)
                         })
                 }
-                const newAdmin = await adminRegistration.create({
+                const newAdmin = await users.create({
                     name: req.body.name,
                     surname: req.body.surname,
                     email: req.body.email,
+                    authorizationId:1,
                     password: await bcrypt.hash(req.body.password, 12)
                 })
                 /* .then((result) => {
                     req.flash("successMessage",[{msg : "Registration Successfully Added"}])
-                    res.redirect("/admin-login")
+                    res.redirect("/login")
     
                 })
                 .catch((err) => {
@@ -120,7 +121,7 @@ const registerPost = async (req, res) => {
 
                 })
                 req.flash("successMessage", [{ msg: "Please Check Your Email Box" }])
-                res.redirect("/admin-login")
+                res.redirect("/login")
 
             }
         } catch (err) {
@@ -133,18 +134,18 @@ const registerPost = async (req, res) => {
 
 
 const forgetPassword = (req, res) => {
-    res.render("adminForgetPassword", { title: "Şifre Sıfırla" })
+    res.render("forgetPassword", { title: "Şifre Sıfırla" })
 }
 const forgetPasswordPost = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         req.flash("validationError", errors.array())
         req.flash("email", req.body.email)
-        res.redirect("/admin-forget-password")
+        res.redirect("/forget-password")
     }
     else {
         try {
-            const _admin = await adminRegistration.findOne({ where: { email: req.body.email, emailActive: true } })
+            const _admin = await users.findOne({ where: { email: req.body.email, emailActive: true } })
 
             // jwt Bilgileri
             if (_admin) {
@@ -163,7 +164,7 @@ const forgetPasswordPost = async (req, res) => {
                 const secret = process.env.RESET_PASSWORD_JWT_SECRET + "-" + _admin.password
                 const jwtToken = jwt.sign(jwtInformation, secret, { expiresIn: process.env.JWT_EXPIRE })
 
-                const url = process.env.WEB_SITE_URL + "admin-reset-password/" + _admin.id + "/" + jwtToken
+                const url = process.env.WEB_SITE_URL + "reset-password/" + _admin.id + "/" + jwtToken
                 console.log("Gidecek Mesaj === " + url);
 
                 // mail gönderme
@@ -190,13 +191,13 @@ const forgetPasswordPost = async (req, res) => {
                     transporter.close()
                 })
                 req.flash("successMessage", [{ msg: "please check your email box" }])
-                res.redirect("/admin-login")
+                res.redirect("/login")
 
             }
             else {
                 req.flash("validationError", [{ msg: "This mail is not registered or the admin is inactive" }])
                 req.flash("email", req.body.email)
-                res.redirect("/admin-forget-password")
+                res.redirect("/forget-password")
             }
 
         } catch (err) {
@@ -212,8 +213,8 @@ const adminLogout = (req, res) => {
         res.clearCookie("connect.sid")
         /* Temizlenecek cookie yi bilirmemiz fayda sağlar çünkü birden çok cookie olabilir */
         /* session sildiğimiz için hata mesajı çalışmayacaktır bu nedenler render ile mesaj yazdıralım */
-        res.render("adminLogin", { title: "Giriş Yap", successMessage: [{ msg: "exit successful" }] })
-        // res.redirect("/admin-login")
+        res.render("login", { title: "Giriş Yap", successMessage: [{ msg: "exit successful" }] })
+        // res.redirect("/login")
     })
 
 }
@@ -225,23 +226,23 @@ const verifyMail = (req, res, next) => {
             jwt.verify(token, process.env.CONFIRM_MAIL_JWT_SECRET, async (e, decoded) => {
                 if (e) {
                     req.flash("error", "the code is incorrect or the token has expired")
-                    res.redirect("/admin-login")
+                    res.redirect("/login")
                 }
                 else {
                     console.log("verify try ilk else === " + token)
                     const idInToken = decoded.id
                     console.log("bulmamız gereken id === " + idInToken)
-                    const result = await adminRegistration.findOne({ where: { id: idInToken } })
+                    const result = await users.findOne({ where: { id: idInToken } })
                     await result.update({ emailActive: true })
                     await result.save()
                     console.log("verify try ilk else içerisinde if den önce === " + token)
                     if (result) {
                         req.flash("successMessage", [{ msg: "email has been successfully confirmed" }])
-                        res.redirect("/admin-login")
+                        res.redirect("/login")
                     }
                     else {
                         req.flash("error", "please register again")
-                        res.redirect("/admin-login")
+                        res.redirect("/login")
                     }
                 }
             })
@@ -251,7 +252,7 @@ const verifyMail = (req, res, next) => {
     }
     else {
         req.flash("error", "No Token or invalid, please register again")
-        res.redirect("/admin-register")
+        res.redirect("/register")
     }
 }
 
@@ -261,7 +262,7 @@ const adminResetPassword = async (req, res, next) => {
 
     if (linkInId && linkInToken) {
         console.log("id ve token değeri var veritabanında arama yapalım");
-        const _foundAdmin = await adminRegistration.findOne({ where: { id: linkInId } })
+        const _foundAdmin = await users.findOne({ where: { id: linkInId } })
 
         const secret = process.env.RESET_PASSWORD_JWT_SECRET + "-" + _foundAdmin.password
 
@@ -269,10 +270,10 @@ const adminResetPassword = async (req, res, next) => {
             jwt.verify(linkInToken, secret, async (e, decoded) => {
                 if (e) {
                     req.flash("error", "the code is incorrect or the token has expired")
-                    res.redirect("/admin-forget-password")
+                    res.redirect("/forget-password")
                 }
                 else {
-                    res.render("adminNewPassword", { id: linkInId, token: linkInToken, title: "Şifre Sıfırla" })
+                    res.render("newPassword", { id: linkInId, token: linkInToken, title: "Şifre Sıfırla" })
                 }
             })
 
@@ -282,7 +283,7 @@ const adminResetPassword = async (req, res, next) => {
     }
     else {
         req.flash("validationError", [{ msg: "Please click the link in the mail or there is no token" }])
-        res.redirect("/admin-forget-password")
+        res.redirect("/forget-password")
     }
 }
 const adminResetPasswordPost = async (req, res, next) => {
@@ -294,29 +295,29 @@ const adminResetPasswordPost = async (req, res, next) => {
         console.log("formdan gelene veriler");
 
         console.log(req.body);
-        res.redirect("/admin-reset-password/" + req.body.id + "/" + req.body.token)
+        res.redirect("/reset-password/" + req.body.id + "/" + req.body.token)
     }
     else {
-        const _foundAdmin = await adminRegistration.findOne({ where: { id: req.body.id, emailActive: true } })
+        const _foundAdmin = await users.findOne({ where: { id: req.body.id, emailActive: true } })
         const secret = process.env.RESET_PASSWORD_JWT_SECRET + "-" + _foundAdmin.password
         try {
             jwt.sign(req.body.token, secret, async (e, decoded) => {
                 if (e) {
                     req.flash("error", "the code is incorrect or the token has expired")
-                    res.redirect("/admin-forget-password")
+                    res.redirect("/forget-password")
                 }
                 else {
                     const hashedPassword = await bcrypt.hash(req.body.password,12)
-                    const result = await adminRegistration.findOne({where:{id: req.body.id}})
+                    const result = await users.findOne({where:{id: req.body.id}})
                     await result.update({password: hashedPassword})
                     await result.save()
                     if (result) {
                         req.flash("successMessage", [{msg : "Password update successful"}])
-                        res.redirect("/admin-login")
+                        res.redirect("/login")
                     }
                     else {
                         req.flash("error", "Please Reset Your Password Again")
-                        res.redirect("/admin-forget-password")
+                        res.redirect("/forget-password")
                     }
 
                 }

@@ -4,6 +4,12 @@
 <body>
     <%-include("./inc/adminHeader")%> 
     <p class="text-center fs-2 fw-bold">Yönetici</p>
+    <div class="mx-auto center w-25 position-absolute bottom-0 end-0 ">
+        <% if (locals.validationError !=undefined || locals.successMessage !=undefined || locals.loginError
+            !=undefined) { %>
+            <%- include("./partials/_message") %>
+                <% } %>
+    </div>
     <div>
         <%- include("./inc/footer") %> 
     </div>

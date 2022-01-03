@@ -9,7 +9,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-9 bg-light">
                 <div class="card p-3 py-4 bg-light">
-                    <div class="text-center"> <img src="/uploads/adminProfileImg/<%- user.adminProfileImg %> " width="100" class="rounded-circle"> </div>
+                    <div class="text-center"> <img src="/uploads/userImages/<%= user.profileImg %>" width="100" class="rounded-circle"> </div>
                     <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">Minare Yazılım</span>
                         <h5 class="mt-2 mb-0"><%= user.name +" "+ user.surname %> </h5> 
                         <form action="/admin/profile-update" method="post" enctype="multipart/form-data">
@@ -20,7 +20,7 @@
                                         <%-include("./partials/_message") %>
                                         <% } %> 
                                 </div>                             
-                                <input type="file" class="btn border" name="productName" id="profileImg">
+                                <input type="file" class="btn border" name="profileImg" id="profileImg">
                                 <p>En Fazla 3mb Boyutunda resim yükleyebilirsiniz</p>
                             </div>    
                        <div class="float-start mt-4">
